@@ -24,8 +24,8 @@
 <li><b>I/O system call:</b> At the end of each CPU burst, the Process is removed from the CPU to wait for its I/O event to be serviced.</li>
 <li><b>I/O Service time:</b> The time needed to service an I/O call is generated randomly based on the value of a user-supplied parameter. When each Process enters I/O service, an event is created to signal the future time of the service&#39;s completion.</li>
 </ul>
-<p class="p6">This diagram shows all of the possible states and locations for processes in the simulator. It pretty closely matches the diagram we studied in Chapter 3 of our text showing the possible states of a Process and how it changes over time.</p>
-<p align="center"><img src="https://classes.pace.edu/content/enforced/324154-CS-371-75206.202170/images/os-sim-diagram.gif?_&d2lSessionVal=bapDRlnTytlarFD8Snnw4ju5f" alt="Process State Diagram" title="Process State Diagram" style="max-width: 100%;"/></p>
+<p class="p6">This diagram shows all of the possible states and locations for processes in the simulator. It pretty closely matches the diagram we studied in Chapter 3 of our text showing the possible states of a process and how it changes over time.</p>
+<p align="center"><img src="https://i.gyazo.com/2ea90eff2e2adff6e602dec38cfe01e5.gif" alt="Process State Diagram" title="Process State Diagram" style="max-width: 100%;"/></p>
 <p class="p6">When your program begins, it should first read several parameters from an input file.</p>
 <ul class="ul1">
 <li>program should ignore first line, reserved for comments</li>
@@ -128,7 +128,7 @@
 </ul>
 </li>
 </ol>
-<p align="center"><img src="https://classes.pace.edu/content/enforced/324154-CS-371-75206.202170/images/ossim-debug-54sec.png?_&d2lSessionVal=bapDRlnTytlarFD8Snnw4ju5f" alt="Debug Illustration" title="Debug Illustration" style="max-width: 100%;"/></p>
+<p align="center"><img src="https://i.gyazo.com/4817b504782947e5c9ba052c5ca076ef.png" alt="Debug Illustration" title="Debug Illustration" style="max-width: 100%;"/></p>
 <p>You need to open a Command Prompt or Terminal window to run the program. Use the <b>cd</b> command to move to the directory where you put the executable and the input text files. If you want to save the output to a file, you can use your Unix redirect skills like so: <b>ossim21 &gt; outputfilename.txt</b></p>
 <h2>Submitting Your Program</h2>
 <p class="p5">Run your program with different sets of input parameters, and save the output of these runs to individual text files. Combine these and all of your source code into a single ZIP file. The file name should be of the form <b>P3-name1-name2.zip</b> (or .tgz) using each group member&#39;s last name in the filename. All documentation should be written as comments in your source files; you do not need to prepare a separate document.</p>
