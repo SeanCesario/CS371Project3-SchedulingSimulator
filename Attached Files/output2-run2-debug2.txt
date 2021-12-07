@@ -2,12 +2,12 @@ OS Scheduling Simulation
 
 Filename to read parameters: params2.txt
 Input file: params2.txt
-File comment: # One process, CPU-bound, no quantum interrupts, avg 4 CPU bursts
+File comment: # One Process, CPU-bound, no quantum interrupts, avg 4 CPU bursts
 File parameters:
   Total simulation time: 10s
   Quantum: 50000 us
   Context switch time: 20 us
-  Average total CPU time per process: 0.050000 s
+  Average total CPU time per Process: 0.050000 s
   Average time between new processes: 100.000000 s
   Percentage of I/O-bound processes: 0%
   Average I/O service time: 5000 us

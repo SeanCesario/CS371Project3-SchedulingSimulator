@@ -7,7 +7,7 @@ File parameters:
   Total simulation time: 100s
   Quantum: 10000 us
   Context switch time: 50 us
-  Average total CPU time per process: 1.000000 s
+  Average total CPU time per Process: 1.000000 s
   Average time between new processes: 1.500000 s
   Percentage of I/O-bound processes: 50%
   Average I/O service time: 20000 us

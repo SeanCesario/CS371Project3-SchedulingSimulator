@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class tester {
+public class Tester {
     public static void main(String[] args) throws FileNotFoundException {
         Map<String, Integer> variables = new HashMap<String, Integer>(); //Map to hold variables
         Scanner in = new Scanner(System.in); //Scanner for user input
