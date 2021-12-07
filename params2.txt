@@ -1,4 +1,4 @@
-# One process, CPU-bound, no quantum interrupts, avg 4 CPU bursts
+# One Process, CPU-bound, no quantum interrupts, avg 4 CPU bursts
 10 totalSimulationTime
 50000   quantum
 20    contextSwitchTime
