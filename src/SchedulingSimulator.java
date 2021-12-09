@@ -31,59 +31,58 @@ public class SchedulingSimulator {
         if(!CPU.isEmpty()){
             if(CPU.peek().getCurrentCPUBurstTimeRemaining() >= CPU.peek().getTotalCPUTime() && quantum >= CPU.peek().getTotalCPUTime()){
                 //total time less than or equal to both quantum and burst time
-                eventQueue.add(new Event("t", systemTime + CPU.peek().getTotalCPUTime()));
+                eventQueue.add(new Event("terminate", systemTime + CPU.peek().getTotalCPUTime()));
             } else if(CPU.peek().getCurrentCPUBurstTimeRemaining() > quantum){
                 //burst > quantum = I/O event
-                eventQueue.add(new Event("i", systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining()));
+                eventQueue.add(new Event("ioBound", systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining()));
             }
             else{
                 //quantum > burst
-                eventQueue.add(new Event("q", systemTime + quantum));
+                eventQueue.add(new Event("quantum", systemTime + quantum));
             }
         }
         else{
             //cpu bound event
-            eventQueue.add(new Event("c", systemTime));
+            eventQueue.add(new Event("cpuBound", systemTime));
         }
     }
 
     public void run(){
-        int p = 0;
+        int pID = 0;
         eventQueue.add(new Event("n", 0));
         while(totalSimulationTime > systemTime){
             Event cEvent = eventQueue.peek();
             switch(cEvent.getType()) {
-                case ("n"):
+                case ("new"):
                     //creates new process and set next new event, updates cpu if empty
-                    Process np = new Process(p, avgCreationTime, avgProcessLength, ioBoundPct);
+                    Process np = new Process(pID, avgCreationTime, avgProcessLength, ioBoundPct);
                     eventQueue.add(new Event("n", np.getNextNewProcessCreationTime()));
                     readyQueue.add(np);
                     updateCPU();
-                    p++;
+                    pID++;
                     break;
-                case("c"):
+                case("cpuBound"):
                     //cpu bound
                     CPU.add(readyQueue.poll());
                     updateCPU();
                     break;
-                case("q"):
+                case("quantum"):
                     //quantum hit and sent back to ready queue
                     readyQueue.add(CPU.poll());
                     updateCPU();
                     break;
-                case("i"):
+                case("ioBound"):
                     //io service start, end time set
                     double cIOserviceTime = 0.0;
                     cIOserviceTime = exponentialRandom(avgIOServiceTime);
-                    eventQueue.add(new Event("r", systemTime + cIOserviceTime));
+                    eventQueue.add(new Event("ioEnd", systemTime + cIOserviceTime));
                     break;
-                case("r"):
+                case("ioEnd"):
                     //io service done
-                    System.out.println("IO Done");
                     readyQueue.add(CPU.poll());
                     updateCPU();
                     break;
-                case("t"):
+                case("terminate"):
                     //log final data and remove it
                     CPU.remove();
                     break;
