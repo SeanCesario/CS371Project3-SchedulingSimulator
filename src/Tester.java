@@ -3,7 +3,7 @@
  * Geetanjali Kanojia
  * 12/7/2021
  * OS - Project 3: Scheduling Simulator
- * Project Description - 
+ * Project Description -
  */
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,75 +16,75 @@ public class Tester {
         System.out.println("OS Scheduling Simulation");
         System.out.println(" ");
         //Scanner will read the file into a hashmap
-            Map<String, Integer> variables = new HashMap();
-            Scanner in = new Scanner(System.in);
-            System.out.print("File name to read parameters: ");
-            String fname = in.nextLine();
-            File file = new File(fname);
-            System.out.println("Input file: " + file.getName());
-            Scanner reader = new Scanner(file);
-            int var = 0;
+        Map<String, Double> variables = new HashMap();
+        Scanner in = new Scanner(System.in);
+        System.out.print("File name to read parameters: ");
+        String fname = in.nextLine();
+        File file = new File(fname);
+        System.out.println("Input file: " + file.getName());
+        Scanner reader = new Scanner(file);
+        double var = 0.0;
 
-            String varName = "";
-            System.out.println("File comment: " + reader.nextLine());
-            System.out.println("File parameters:");
+        String varName = "";
+        System.out.println("File comment: " + reader.nextLine());
+        System.out.println("File parameters:");
 
-            //storing variables in hashmap
-            while(reader.hasNext()) {
-                if (reader.hasNextInt()) {
-                    var = reader.nextInt();
-                }
-                else {
-                    varName = reader.next();
-                    variables.put(varName, var);
-                }
-
+        //storing variables in hashmap
+        while(reader.hasNext()) {
+            if (reader.hasNextDouble()) {
+                var = reader.nextDouble();
             }
-            System.out.println(variables);
+            else {
+                varName = reader.next();
+                variables.put(varName, var);
+            }
 
-       //Printing from hashmap
-            System.out.println(" Total simulation time: " + variables.get("totalSimulationTime") +"s");
-            System.out.println(" Quantum: " + variables.get("quantum") +"us");
-            System.out.println(" Context switch time: "+ variables.get("contextSwitchTime") +"us");
-            System.out.println(" Average total CPU time per process: "+ variables.get("averageProcessLength") +"s");
-            System.out.println(" Average time between new processes: "+ variables.get("averageCreationTime") +"s");
-            System.out.println(" Percentage of I/O-bound processes: " + variables.get("IOBoundPct") +"% ");
-            System.out.println(" Average I/O service time: "+ variables.get("averageIOserviceTime") +"us");
+        }
+        SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"), variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"), variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct"));
+
+        //Printing from hashmap
+        System.out.println(" Total simulation time: " + variables.get("totalSimulationTime") +"s");
+        System.out.println(" Quantum: " + variables.get("quantum") +"us");
+        System.out.println(" Context switch time: "+ variables.get("contextSwitchTime") +"us");
+        System.out.println(" Average total CPU time per process: "+ variables.get("averageProcessLength") +"s");
+        System.out.println(" Average time between new processes: "+ variables.get("averageCreationTime") +"s");
+        System.out.println(" Percentage of I/O-bound processes: " + variables.get("IOBoundPct") +"% ");
+        System.out.println(" Average I/O service time: "+ variables.get("averageIOserviceTime") +"us");
 
         System.out.println("\n");
 /**
-        //Shows debug levels
-        System.out.println("Print debugging info -- \n  (0) none\n" +
-                "  (1) N/F events\n" +
-                "  (2) all events\n" +
-                "  (3) all events and queues");
+ //Shows debug levels
+ System.out.println("Print debugging info -- \n  (0) none\n" +
+ "  (1) N/F events\n" +
+ "  (2) all events\n" +
+ "  (3) all events and queues");
 
 
-        System.out.print("Debug Level: ");
-        int debugLevel = in.nextInt();
+ System.out.print("Debug Level: ");
+ int debugLevel = in.nextInt();
 
-        if(debugLevel == 1)
-        {
-            System.out.print("print all N/F events");
-            //Time   0.000000 Event 'New Process': pid=0 totalCPU=1.600 I/O-bound; next New at   0.368600
-        }
-        else if(debugLevel == 2)
-        {
-            System.out.print("print all events");
-        }
-        else if(debugLevel == 3)
-        {
-            System.out.print("print all events and queues");
-        }
-        else
-        {
-           //print nothing
-        }
+ if(debugLevel == 1)
+ {
+ System.out.print("print all N/F events");
+ //Time   0.000000 Event 'New Process': pid=0 totalCPU=1.600 I/O-bound; next New at   0.368600
+ }
+ else if(debugLevel == 2)
+ {
+ System.out.print("print all events");
+ }
+ else if(debugLevel == 3)
+ {
+ System.out.print("print all events and queues");
+ }
+ else
+ {
+ //print nothing
+ }
 
 
-        //while() loop for the debugging
+ //while() loop for the debugging
 
-**/
+ **/
 
 
         System.out.println("\n");
