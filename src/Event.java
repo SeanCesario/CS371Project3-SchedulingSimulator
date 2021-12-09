@@ -1,9 +1,9 @@
 public class Event {
     //Define a class or struct to represent an event. This holds only two pieces of info: event type and event timestamp, the time the event is to occur
     private final String type;
-    private final long timeStamp;
+    private final double timeStamp;
 
-    public Event(String type, long timeStamp){
+    public Event(String type, double timeStamp){
         this.type = type;
         this.timeStamp = timeStamp;
     }
@@ -12,7 +12,7 @@ public class Event {
         return type;
     }
 
-    public long getTimeStamp() {
+    public double getTimeStamp() {
         return timeStamp;
     }
 }
