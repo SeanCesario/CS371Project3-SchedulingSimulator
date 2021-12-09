@@ -10,7 +10,7 @@ public class SchedulingSimulator {
     private final double quantum;
     private final double totalSimulationTime;
     private final double contextSwitchTime;
-    private final double ioBoundPct;
+    private final int ioBoundPct;
 
     private final Queue<Process> processes = new LinkedList<>();
     private final Queue<Process> readyQueue = new LinkedList<>();
@@ -18,7 +18,7 @@ public class SchedulingSimulator {
     private final Queue<Process> IOQueue = new LinkedList<>();
     private Queue<Event> eventQueue = new PriorityQueue<>();
 
-    public SchedulingSimulator(double avgCreationTime,double avgIOServiceTime,double avgProcessLength,double quantum,double totalSimulationTime,double contextSwitchTime,double IOBoundPct){
+    public SchedulingSimulator(double avgCreationTime,double avgIOServiceTime,double avgProcessLength,double quantum,double totalSimulationTime,double contextSwitchTime,int IOBoundPct){
         this.avgCreationTime = (avgCreationTime/1000000.0);
         this.avgIOServiceTime = (avgIOServiceTime/1000000.0);
         this.avgProcessLength = (avgProcessLength/1000000.0);
@@ -29,28 +29,30 @@ public class SchedulingSimulator {
         this.systemTime = 0;
     }
 
-    public void newProcess(){
-        systemTime += exponentialRandom(avgCreationTime);
-        readyQueue.add(new Process());
+    public void newProcess(int ID){
+        double thisCreationTime = exponentialRandom(avgCreationTime);
+        double thisProcessLength= exponentialRandom(avgProcessLength);
+        systemTime += thisCreationTime;
+        readyQueue.add(new Process(ID, thisCreationTime, thisProcessLength, ioBoundPct));
     }
 
     public void updateCPU(){
         if(CPU.isEmpty()){
             CPU.add(readyQueue.poll());
-            if(CPU.peek().getProcessBurst() >= CPU.peek().getProcessLength() || quantum >= CPU.peek().getProcessLength()){
+            if(CPU.peek().getCurrentCPUBurstTimeRemaining() >= CPU.peek().getTotalCPUTime() || quantum >= CPU.peek().getTotalCPUTime()){
                 //terminated
-                CPU.peek().setProcessLength(0);
-                systemTime += CPU.peek().getProcessLength();
+                CPU.peek().setTotalCPUTime(0);
+                systemTime += CPU.peek().getTotalCPUTime();
                 CPU.remove();
-            } else if(CPU.peek().getProcessBurst() > quantum){
+            } else if(CPU.peek().getCurrentCPUBurstTimeRemaining() > quantum){
                 //burst > quantum
-                CPU.peek().setProcessLength(CPU.peek().getProcessLength() - CPU.peek().getProcessBurst());
-                systemTime += CPU.peek().getProcessBurst();
+                CPU.peek().setTotalCPUTime(CPU.peek().getTotalCPUTime() - CPU.peek().getCurrentCPUBurstTimeRemaining());
+                systemTime += CPU.peek().getCurrentCPUBurstTimeRemaining();
                 readyQueue.add(CPU.poll());
             }
             else{
                 //quantum > burst
-                CPU.peek().setProcessLength(CPU.peek().getProcessLength() - quantum);
+                CPU.peek().setTotalCPUTime(CPU.peek().getTotalCPUTime() - quantum);
                 systemTime += quantum;
                 readyQueue.add(CPU.poll());
             }
@@ -63,15 +65,17 @@ public class SchedulingSimulator {
     }
 
     public void run(){
+        int i = 0;
         while(totalSimulationTime > systemTime){
-            newProcess();
+            newProcess(i);
             updateCPU();
+            i++;
         }
     }
 
     //add methods here
     double exponentialRandom (double expected) {
-        double nice = -expected * Math.log ( Math.random() );
+        double nice = -expected * Math.log (Math.random());
         nice *= 10000;
         nice = (int) nice;
         nice /= 10000;
