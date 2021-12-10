@@ -7,9 +7,7 @@
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Tester {
     public static void main(String[] args) throws FileNotFoundException {
@@ -40,8 +38,8 @@ public class Tester {
             }
 
         }
-        SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"), variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"), variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct"));
-
+        SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"), variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"), variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
+        schedulingSimulator.run();
         //Printing from hashmap
         System.out.println(" Total simulation time: " + variables.get("totalSimulationTime") +"s");
         System.out.println(" Quantum: " + variables.get("quantum") +"us");
@@ -52,40 +50,40 @@ public class Tester {
         System.out.println(" Average I/O service time: "+ variables.get("averageIOserviceTime") +"us");
 
         System.out.println("\n");
-/**
- //Shows debug levels
- System.out.println("Print debugging info -- \n  (0) none\n" +
- "  (1) N/F events\n" +
- "  (2) all events\n" +
- "  (3) all events and queues");
+
+        /**
+         //Shows debug levels
+         System.out.println("Print debugging info -- \n  (0) none\n" +
+         "  (1) N/F events\n" +
+         "  (2) all events\n" +
+         "  (3) all events and queues");
 
 
- System.out.print("Debug Level: ");
- int debugLevel = in.nextInt();
+         System.out.print("Debug Level: ");
+         int debugLevel = in.nextInt();
 
- if(debugLevel == 1)
- {
- System.out.print("print all N/F events");
- //Time   0.000000 Event 'New Process': pid=0 totalCPU=1.600 I/O-bound; next New at   0.368600
- }
- else if(debugLevel == 2)
- {
- System.out.print("print all events");
- }
- else if(debugLevel == 3)
- {
- System.out.print("print all events and queues");
- }
- else
- {
- //print nothing
- }
+         if(debugLevel == 1)
+         {
+         System.out.print("print all N/F events");
+         //Time   0.000000 Event 'New Process': pid=0 totalCPU=1.600 I/O-bound; next New at   0.368600
+         }
+         else if(debugLevel == 2)
+         {
+         System.out.print("print all events");
+         }
+         else if(debugLevel == 3)
+         {
+         System.out.print("print all events and queues");
+         }
+         else
+         {
+         //print nothing
+         }
 
 
- //while() loop for the debugging
+         //while() loop for the debugging
 
- **/
-
+         **/
 
         System.out.println("\n");
         //Print the results
