@@ -163,6 +163,16 @@ public class Process {
         this.numOfIORequests = numOfIORequests;
     }
 
+    public void generateNewBurstLength(){
+        if (ioBound) {
+            currentCPUBurstLength = (double)generateNormalRandom(1000, 2000) / 1000000.0;
+        } else if (cpuBound) {
+            currentCPUBurstLength = (double)generateNormalRandom(10000, 20000) / 1000000.0;
+        }
+        currentCPUBurstTimeRemaining = currentCPUBurstLength;
+    }
+
+
     //Takes two int parameters, min and max, and returns a 
     //random int between those two values with a uniform distribution.
     public int generateNormalRandom(int min, int max) {

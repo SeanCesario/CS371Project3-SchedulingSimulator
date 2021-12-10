@@ -7,9 +7,7 @@
  */
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Tester {
     public static void main(String[] args) throws FileNotFoundException {
@@ -41,7 +39,7 @@ public class Tester {
 
         }
         SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"), variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"), variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
-
+        schedulingSimulator.run();
         //Printing from hashmap
         System.out.println(" Total simulation time: " + variables.get("totalSimulationTime") +"s");
         System.out.println(" Quantum: " + variables.get("quantum") +"us");

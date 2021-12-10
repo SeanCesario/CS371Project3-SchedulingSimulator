@@ -1,4 +1,4 @@
-public class Event {
+public class Event implements Comparable<Event>{
     //Define a class or struct to represent an event. This holds only two pieces of info: event type and event timestamp, the time the event is to occur
     private final String type;
     private final double timeStamp;
@@ -14,5 +14,18 @@ public class Event {
 
     public double getTimeStamp() {
         return timeStamp;
+    }
+
+    public boolean equals(Event other){
+        return this.timeStamp == other.timeStamp;
+    }
+
+    public int compareTo(Event other){
+        if(this.equals(other))
+            return 0;
+        else if(this.timeStamp > other.timeStamp)
+            return 1;
+        else
+            return -1;
     }
 }
