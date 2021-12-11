@@ -40,8 +40,7 @@ public class SchedulingSimulator {
                 //quantum > burst = back to ready queue
                 eventQueue.add(new Event("quantum", (contextSwitchTime + systemTime + quantum)));
             }
-        }
-        else{
+        } else{
             //if empty create cpu bound event
             eventQueue.add(new Event("cpuBound", + systemTime));
         }
@@ -86,11 +85,11 @@ public class SchedulingSimulator {
                     CPU.peek().setCPUTimeRemaining(CPU.peek().getCPUTimeRemaining() - CPU.peek().getCurrentCPUBurstTimeRemaining()); //burst time finished so subtract the time just spent from total cpu time
                     CPU.peek().setCPUTimeSpent(CPU.peek().getCPUTimeSpent() + CPU.peek().getCurrentCPUBurstTimeRemaining()); //add remaining burst to cpu time spent
                     CPU.peek().generateNewBurstLength(); //Burst is at 0 so create a new burst
-                    //System.out.println("Global avg: " + avgIOServiceTime);
+                    System.out.println("Global avg: " + avgIOServiceTime);
                     double cIOserviceTime = exponentialRandom(avgIOServiceTime);//create new random io service time
-                    //System.out.println("Initial random: " + cIOserviceTime);
+                    System.out.println("Initial random: " + cIOserviceTime);
                     cIOserviceTime /= 1000.0;
-                    //System.out.println("Actual random " + cIOserviceTime);
+                    System.out.println("Actual random " + cIOserviceTime);
                     CPU.peek().setIoTimeSpent(CPU.peek().getIoTimeSpent() + cIOserviceTime); //add the io time to io time spent
                     CPU.peek().setNumOfIORequests(CPU.peek().getNumOfIORequests() + 1); //iterate io request count
                     System.out.println("Process " + CPU.peek().getPid() + " IO bound at  " + systemTime + " for " +  cIOserviceTime + " until " + (cIOserviceTime + systemTime));
