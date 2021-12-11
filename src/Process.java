@@ -145,7 +145,7 @@ public class Process {
 
     // Returns time spent in ready queue
     public double getReadyQueueTimeSpent() {
-        return ReadyQueueTimeSpent;
+        return ((totalCPUTime - CPUTimeRemaining) - (CPUTimeSpent + ioTimeSpent));
     }
 
     // Sets time spent in ready queue
