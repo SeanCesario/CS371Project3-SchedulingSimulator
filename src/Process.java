@@ -3,7 +3,7 @@
  * Geetanjali Kanojia
  * 12/9/2021
  * OS - Project 3: Scheduling Simulator
- * Project Description -
+ * File Description - Process class
  */
 public class Process {
     private int pid;
@@ -145,7 +145,7 @@ public class Process {
 
     // Returns time spent in ready queue
     public double getReadyQueueTimeSpent() {
-        return ((totalCPUTime - CPUTimeRemaining) - (CPUTimeSpent + ioTimeSpent));
+        return ReadyQueueTimeSpent;
     }
 
     // Sets time spent in ready queue
