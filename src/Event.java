@@ -1,5 +1,13 @@
+/* Sean Cesario
+ * Prince Paul
+ * Geetanjali Kanojia
+ * 12/7/2021
+ * OS - Project 3: Scheduling Simulator
+ * File Description - Event class
+ */
 public class Event implements Comparable<Event>{
-    //Define a class or struct to represent an event. This holds only two pieces of info: event type and event timestamp, the time the event is to occur
+    //Define a class or struct to represent an event. This holds only two pieces of info: 
+	//event type and event timestamp, the time the event is to occur
     private final String type;
     private final double timeStamp;
 

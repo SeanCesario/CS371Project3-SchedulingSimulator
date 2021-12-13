@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 public class Tester {
     public static void main(String[] args) throws FileNotFoundException {
-        // INPUT SECTION
+    	// INPUT SECTION
         System.out.println("OS Scheduling Simulation");
         System.out.println(" ");
         Map<String, Double> variables = new HashMap<String, Double>();
@@ -60,6 +60,7 @@ public class Tester {
         SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"),
                 variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"),
                 variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
+
         schedulingSimulator.run();
 
         // PRINT END OF PROGRAM
