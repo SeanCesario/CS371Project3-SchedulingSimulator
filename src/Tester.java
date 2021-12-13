@@ -55,11 +55,12 @@ public class Tester {
         System.out.println();
         System.out.println("Print debugging info -- Level (1) -- N/F events --");
         System.out.println();
-        
+
         // RUN THE SIMULATOR
-        SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"), 
-        		variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"), 
-        		variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
+        SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"),
+                variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"),
+                variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
+
         schedulingSimulator.run();
 
         // PRINT END OF PROGRAM
