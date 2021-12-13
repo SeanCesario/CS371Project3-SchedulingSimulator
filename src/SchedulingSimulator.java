@@ -29,16 +29,21 @@ public class SchedulingSimulator {
     }
 
     public void updateCPU(){
+        System.out.println("Update CPU called CPU is " + CPU.isEmpty());
         if(!CPU.isEmpty()){
-            if(CPU.peek().getCurrentCPUBurstTimeRemaining() >= CPU.peek().getCPUTimeRemaining() && quantum >= CPU.peek().getCPUTimeRemaining()){
+            System.out.print("Current burst time remaining: " + CPU.peek().getCurrentCPUBurstTimeRemaining() + " total CPU time remaining: " + CPU.peek().getCPUTimeRemaining() + " quantum: " + quantum + " so it ");
+            if((CPU.peek().getCPUTimeRemaining() - CPU.peek().getCurrentCPUBurstTimeRemaining() <= 0) && (CPU.peek().getCPUTimeRemaining() - quantum <= 0)){
                 //total time less than or equal to both quantum and burst time
+                System.out.println("terminates at: " + (contextSwitchTime + systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining()));
                 eventQueue.add(new Event("terminate", (contextSwitchTime + systemTime + CPU.peek().getTotalCPUTime())));
-            } else if(CPU.peek().getCurrentCPUBurstTimeRemaining() > quantum){
+            } else if(CPU.peek().getCurrentCPUBurstTimeRemaining() < quantum){
                 //burst > quantum = I/O event
+                System.out.println("IOs until: " + (contextSwitchTime + systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining()));
                 eventQueue.add(new Event("ioBound", (contextSwitchTime + systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining())));
             } else{
                 //quantum > burst = back to ready queue
-                eventQueue.add(new Event("quantum", (contextSwitchTime + systemTime + quantum)));
+                System.out.println("quantum until: " + (contextSwitchTime + systemTime + quantum));
+                eventQueue.add(new Event("quantums", (contextSwitchTime + systemTime + quantum)));
             }
         } else{
             //if empty create cpu bound event
@@ -57,18 +62,19 @@ public class SchedulingSimulator {
                     //creates new process and set next new event, updates cpu if empty
                     Process np = new Process(pID, avgCreationTime, avgProcessLength, ioBoundPct); //create new process
 
-                    System.out.println("Process " + pID + " created with length of " + np.getTotalCPUTime() + " next process at " + np.getNextNewProcessCreationTime());
+                    System.out.println("Process " + pID + " created with length of " + np.getTotalCPUTime() + " next process at " + (systemTime + np.getNextNewProcessCreationTime()));
 
                     pID++; //iterate id for next process
-                    eventQueue.add(new Event("new", np.getNextNewProcessCreationTime() + systemTime)); //make event for next process
+                    eventQueue.add(new Event("new", (np.getNextNewProcessCreationTime() + systemTime))); //make event for next process
                     readyQueue.add(np); //add new process to ready queue
                     if(CPU.isEmpty())
                         updateCPU(); //run cpu method only if it is empty, since there might be a process in there and we don't want duplicate events
                     break;
                 case("cpuBound"):
                     //cpu bound
+                    System.out.println("Process " + readyQueue.peek().getPid() + " cpuBound at " + systemTime);
                     CPU.add(readyQueue.remove()); //move top of ready to CPU
-                    System.out.println("Process " + CPU.peek().getPid() + " CPU bound at " + systemTime);
+                    //System.out.println("Process " + CPU.peek().getPid() + " CPU bound at " + systemTime);
                     updateCPU(); //decide what to do with current process in CPU
                     break;
                 case("quantum"):
@@ -76,7 +82,11 @@ public class SchedulingSimulator {
                     System.out.println("Process " + CPU.peek().getPid() + " ready bound at  " + systemTime);
 
                     CPU.peek().setCPUTimeRemaining(CPU.peek().getCPUTimeRemaining() - quantum); //decrease time remaining by quantum
-                    CPU.peek().setCurrentCPUBurstTimeRemaining(CPU.peek().getCurrentCPUBurstTimeRemaining() - quantum); //decrease current burst time remaining quantum
+                    CPU.peek().setCPUTimeSpent(CPU.peek().getCPUTimeSpent() + quantum); //add quantum to cpu time spent
+                    if(CPU.peek().getCurrentCPUBurstTimeRemaining() - quantum <= 0) //if the current burst will expire from the quantum then make a new burst length
+                        CPU.peek().generateNewBurstLength();
+                    else
+                        CPU.peek().setCurrentCPUBurstTimeRemaining(CPU.peek().getCurrentCPUBurstTimeRemaining() - quantum); //decrease current burst time remaining quantum
                     readyQueue.add(CPU.remove()); //remove from CPU and put back into ready queue
                     updateCPU(); //update CPU as it is empty and there is at least this process in the ready queue
                     break;
@@ -85,17 +95,15 @@ public class SchedulingSimulator {
                     CPU.peek().setCPUTimeRemaining(CPU.peek().getCPUTimeRemaining() - CPU.peek().getCurrentCPUBurstTimeRemaining()); //burst time finished so subtract the time just spent from total cpu time
                     CPU.peek().setCPUTimeSpent(CPU.peek().getCPUTimeSpent() + CPU.peek().getCurrentCPUBurstTimeRemaining()); //add remaining burst to cpu time spent
                     CPU.peek().generateNewBurstLength(); //Burst is at 0 so create a new burst
-                    System.out.println("Global avg: " + avgIOServiceTime);
-                    double cIOserviceTime = exponentialRandom(avgIOServiceTime);//create new random io service time
-                    System.out.println("Initial random: " + cIOserviceTime);
-                    cIOserviceTime /= 1000.0;
-                    System.out.println("Actual random " + cIOserviceTime);
+                    double cIOserviceTime = exponentialRandom(avgIOServiceTime); //create new random io service time
+                    cIOserviceTime /= 1000.0; //convert into seconds
                     CPU.peek().setIoTimeSpent(CPU.peek().getIoTimeSpent() + cIOserviceTime); //add the io time to io time spent
-                    CPU.peek().setNumOfIORequests(CPU.peek().getNumOfIORequests() + 1); //iterate io request count
+                    CPU.peek().setNumOfIORequests(CPU.peek().getNumOfIORequests() + 1); //increment io request count
                     System.out.println("Process " + CPU.peek().getPid() + " IO bound at  " + systemTime + " for " +  cIOserviceTime + " until " + (cIOserviceTime + systemTime));
 
                     IO.add(CPU.remove()); //move process from the CPU to the IO
                     eventQueue.add(new Event("ioEnd", systemTime + cIOserviceTime)); //create the event for how long it will take
+                    updateCPU();
                     break;
                 case("ioEnd"):
                     //io service done
@@ -109,8 +117,8 @@ public class SchedulingSimulator {
 
                     CPU.peek().setCPUTimeSpent(CPU.peek().getCPUTimeSpent() + CPU.peek().getCPUTimeRemaining()); //add remaining time to the time spent in the CPU
                     CPU.peek().setCPUTimeRemaining(0); //set time remaining to 0
-                    CPU.peek().setReadyQueueTimeSpent(CPU.peek().getTotalCPUTime() - (CPU.peek().getCPUTimeSpent() + CPU.peek().getIoTimeSpent()));
                     CPU.remove(); //remove it
+                    updateCPU();
                     break;
             }
         }
