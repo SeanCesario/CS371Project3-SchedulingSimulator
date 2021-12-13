@@ -42,8 +42,8 @@ public class SchedulingSimulator {
                 eventQueue.add(new Event("ioBound", (contextSwitchTime + systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining())));
             } else{
                 //quantum > burst = back to ready queue
-                System.out.println("quantum until: " + (contextSwitchTime + systemTime + quantum));
-                eventQueue.add(new Event("quantums", (contextSwitchTime + systemTime + quantum)));
+                System.out.println("quantums until: " + (contextSwitchTime + systemTime + quantum));
+                eventQueue.add(new Event("quantum", (contextSwitchTime + systemTime + quantum)));
             }
         } else{
             //if empty create cpu bound event
@@ -55,7 +55,10 @@ public class SchedulingSimulator {
         int pID = 1;
         eventQueue.add(new Event("new", 0));
         while(totalSimulationTime > eventQueue.peek().getTimeStamp()){
+            for (Event e: eventQueue)
+                System.out.println("Type: " + e.getType() + " Time: " + e.getTimeStamp());
             Event cEvent = eventQueue.remove();
+            System.out.println("Current event: " + cEvent.getType() + " time: " + cEvent.getTimeStamp());
             systemTime = cEvent.getTimeStamp();
             switch(cEvent.getType()) {
                 case ("new"):
@@ -74,7 +77,6 @@ public class SchedulingSimulator {
                     //cpu bound
                     System.out.println("Process " + readyQueue.peek().getPid() + " cpuBound at " + systemTime);
                     CPU.add(readyQueue.remove()); //move top of ready to CPU
-                    //System.out.println("Process " + CPU.peek().getPid() + " CPU bound at " + systemTime);
                     updateCPU(); //decide what to do with current process in CPU
                     break;
                 case("quantum"):
@@ -103,7 +105,6 @@ public class SchedulingSimulator {
 
                     IO.add(CPU.remove()); //move process from the CPU to the IO
                     eventQueue.add(new Event("ioEnd", systemTime + cIOserviceTime)); //create the event for how long it will take
-                    updateCPU();
                     break;
                 case("ioEnd"):
                     //io service done
