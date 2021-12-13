@@ -18,6 +18,8 @@ public class Process {
     private double ioTimeSpent;
     private double ReadyQueueTimeSpent;
     private int numOfIORequests;
+    private double timeStampStart;
+    private double timeStampEnd;
 
     // Constructor
     public Process(int pid, double avgCreationTime, double avgProcessLength, int IOBoundPct) {
@@ -145,12 +147,13 @@ public class Process {
 
     // Returns time spent in ready queue
     public double getReadyQueueTimeSpent() {
-        return ((totalCPUTime - CPUTimeRemaining) - (CPUTimeSpent + ioTimeSpent));
+        //ReadyQueueTimeSpent = (totalCPUTime - CPUTimeRemaining) - (CPUTimeSpent + ioTimeSpent);
+        return ReadyQueueTimeSpent;
     }
 
     // Sets time spent in ready queue
-    public void setReadyQueueTimeSpent(double readyQueueTimeSpent) {
-        ReadyQueueTimeSpent = readyQueueTimeSpent;
+    public void setReadyQueueTimeSpent(double ReadyQueueTimeSpent) {
+        this.ReadyQueueTimeSpent = ReadyQueueTimeSpent;
     }
 
     // Returns number of IO requests
@@ -170,6 +173,15 @@ public class Process {
             currentCPUBurstLength = (double)generateNormalRandom(10000, 20000) / 1000000.0;
         }
         currentCPUBurstTimeRemaining = currentCPUBurstLength;
+    }
+
+    public void startReadyWaiting(double timeStampStart){
+        this.timeStampStart = timeStampStart;
+    }
+
+    public void endReadyWaiting(double timeStampEnd){
+        this.timeStampEnd = timeStampEnd;
+        ReadyQueueTimeSpent += (this.timeStampEnd - timeStampStart);
     }
 
 
