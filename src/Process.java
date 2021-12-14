@@ -183,7 +183,6 @@ public class Process {
         ReadyQueueTimeSpent += (this.timeStampEnd - timeStampStart);
     }
 
-
     //Takes two int parameters, min and max, and returns a 
     //random int between those two values with a uniform distribution.
     public int generateNormalRandom(int min, int max) {

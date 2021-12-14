@@ -58,9 +58,8 @@ public class Tester {
 
         // RUN THE SIMULATOR
         SchedulingSimulator schedulingSimulator = new SchedulingSimulator(variables.get("averageCreationTime"),
-                variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"),
-                variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
-
+            variables.get("averageIOserviceTime"), variables.get("averageProcessLength"), variables.get("quantum"),
+            variables.get("totalSimulationTime"), variables.get("contextSwitchTime"), variables.get("IOBoundPct").intValue());
         schedulingSimulator.run();
 
         // PRINT END OF PROGRAM
