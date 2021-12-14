@@ -55,7 +55,7 @@ public class SchedulingSimulator {
         this.systemTime = 0;
     }
 
-    //CPU time left is least = terminate, quantum is least = ready bound, current burst is least = io bound
+    // CPU time left is least = terminate, quantum is least = ready bound, current burst is least = io bound
     public void updateCPU() {
         if (CPU.peek().getCPUTimeRemaining() < CPU.peek().getCurrentCPUBurstTimeRemaining() && CPU.peek().getCPUTimeRemaining() < quantum) {
             //total time less than or equal to both quantum and burst time
@@ -63,12 +63,10 @@ public class SchedulingSimulator {
             eventQueue.add(new Event("terminate", (contextSwitchTime + systemTime + CPU.peek().getTotalCPUTime())));
         } else if (quantum < CPU.peek().getCurrentCPUBurstTimeRemaining()) {
             //burst > quantum = back to ready queue
-            //totalCPUTimeSpentForAllCreatedProcesses += CPU.peek().getCPUTimeSpent();
             totalContextSwitchTime += contextSwitchTime;
             eventQueue.add(new Event("quantum", (contextSwitchTime + systemTime + quantum)));
         } else {
             //burst < quantum = I/O event
-            //totalCPUTimeSpentForAllCreatedProcesses += CPU.peek().getCPUTimeSpent();
             totalContextSwitchTime += contextSwitchTime;
             eventQueue.add(new Event("ioBound", (contextSwitchTime + systemTime + CPU.peek().getCurrentCPUBurstTimeRemaining())));
         }
@@ -156,12 +154,10 @@ public class SchedulingSimulator {
                         System.out.println("Time   " + dfLong.format(systemTime) + " Event 'Process Finished': pid=" + CPU.peek().getPid()
                                 + " CPU-bound totalCPU=" + dfShort.format(CPU.peek().getTotalCPUTime()) + " waitready=" + dfShort.format(CPU.peek().getReadyQueueTimeSpent())
                                 + " inI/O=" + dfShort.format(CPU.peek().getIoTimeSpent()));
-                        System.out.println("CPUTimeSpent : " + CPU.peek().getCPUTimeSpent());
                     } else if (CPU.peek().isIoBound()) {
                         System.out.println("Time   " + dfLong.format(systemTime) + " Event 'Process Finished': pid=" + CPU.peek().getPid()
                                 + " I/O-bound totalCPU=" + dfShort.format(CPU.peek().getTotalCPUTime()) + " waitready=" + dfShort.format(CPU.peek().getReadyQueueTimeSpent())
                                 + " inI/O=" + dfShort.format(CPU.peek().getIoTimeSpent()));
-                        System.out.println("CPUTimeSpent : " + CPU.peek().getCPUTimeSpent());
                     }
                     if (CPU.peek().isCpuBound()) {
                         numOfCPUBoundProcessesFinished++;
@@ -201,11 +197,11 @@ public class SchedulingSimulator {
         System.out.println("Average turnaround time:                " + dfShort.format(((totalCPUBoundFinishedProcessesTurnaroundTime + totalIOBoundFinishedProcessesTurnaroundTime) / ((double) numOfCPUBoundProcessesFinished + (double) numOfIOBoundProcessesFinished))) + " seconds");
         System.out.println();
         System.out.println("Number of I/O-BOUND proc. completed:    " + numOfIOBoundProcessesFinished);
-        System.out.println("Average CPU time:                       " + dfShort.format((totalTotalCPUTimeForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)) + " seconds");
-        System.out.println("Average ready waiting time:             " + dfShort.format((totalReadyWaitingTimeForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)) + " seconds");
-        System.out.println("Average I/O service time:               " + dfShort.format((totalIOServiceTimeForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)) + " seconds");
-        System.out.println("Average turnaround time:                " + dfShort.format((totalIOBoundFinishedProcessesTurnaroundTime / (double) numOfIOBoundProcessesFinished)) + " seconds");
-        System.out.println("Average I/O calls/proc.:                " + dfVeryShort.format((totalNumOfIOCallsForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)));
+        System.out.println("Average CPU time:                       " + dfShort.format((numOfIOBoundProcessesFinished == 0) ? 0.000 : (totalTotalCPUTimeForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)) + " seconds");
+        System.out.println("Average ready waiting time:             " + dfShort.format((numOfIOBoundProcessesFinished == 0) ? 0.000 : (totalReadyWaitingTimeForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)) + " seconds");
+        System.out.println("Average I/O service time:               " + dfShort.format((numOfIOBoundProcessesFinished == 0) ? 0.000 : (totalIOServiceTimeForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)) + " seconds");
+        System.out.println("Average turnaround time:                " + dfShort.format((numOfIOBoundProcessesFinished == 0) ? 0.000 : (totalIOBoundFinishedProcessesTurnaroundTime / (double) numOfIOBoundProcessesFinished)) + " seconds");
+        System.out.println("Average I/O calls/proc.:                " + dfVeryShort.format((numOfIOBoundProcessesFinished == 0) ? 0.000 : (totalNumOfIOCallsForIOBoundProcesses / (double) numOfIOBoundProcessesFinished)));
         System.out.println();
         System.out.println("Number of CPU-BOUND proc. completed:    " + numOfCPUBoundProcessesFinished);
         System.out.println("Average CPU time:                       " + dfShort.format((totalTotalCPUTimeForCPUBoundProcesses / (double) numOfCPUBoundProcessesFinished)) + " seconds");
